@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+
+<h2>Welcome {{ current_user.username }}</h2>
+<a href="/">Analyze New Resume</a> |
+<a href="/logout">Logout</a>
+
+<h3>Your Previous Analyses:</h3>
+
+{% for r in resumes %}
+    <div>
+        <p><strong>Score:</strong> {{ r.score }}%</p>
+        <hr>
+    </div>
+{% else %}
+    <p>No previous analyses yet.</p>
+{% endfor %}
+
+</body>
+</html>

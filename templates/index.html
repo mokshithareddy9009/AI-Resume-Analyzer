@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Resume Analyzer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+
+    <h1 class="main-heading">🤖 AI Resume Analyzer</h1>
+
+    <!-- Navigation -->
+    <div style="text-align:right; margin-bottom:15px;">
+        <a href="/dashboard">Dashboard</a> |
+        <a href="/logout">Logout</a>
+    </div>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <p style="color:red; font-weight:bold;">{{ message }}</p>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" enctype="multipart/form-data">
+
+        <label>📌 Paste Job Description:</label>
+        <textarea name="job_description" rows="6" required></textarea>
+
+        <label>📄 Paste Resume Text (OR upload PDF below):</label>
+        <textarea name="resume" rows="6"></textarea>
+
+        <label>⬆ Upload Resume (PDF only):</label>
+        <input type="file" name="resume_file">
+
+        <button type="submit">Analyze Resume</button>
+
+    </form>
+
+    {% if score is not none %}
+
+    <div class="results">
+
+        <h2>Match Score: {{ score }}%</h2>
+
+        <div class="progress-bar">
+            <div class="progress" style="width: {{ score }}%;">
+                {{ score }}%
+            </div>
+        </div>
+
+        <p class="feedback">{{ feedback }}</p>
+
+        <div class="skills-box">
+            <h3>🎯 Skills Required</h3>
+            {% if job_skills %}
+                {% for skill in job_skills %}
+                    <span class="badge required">{{ skill }}</span>
+                {% endfor %}
+            {% else %}
+                <p>No skills detected.</p>
+            {% endif %}
+        </div>
+
+        <div class="skills-box">
+            <h3>✅ Skills Found</h3>
+            {% if resume_skills %}
+                {% for skill in resume_skills %}
+                    <span class="badge matched">{{ skill }}</span>
+                {% endfor %}
+            {% else %}
+                <p>No matching skills found.</p>
+            {% endif %}
+        </div>
+
+        <div class="skills-box">
+            <h3>❌ Skills Missing</h3>
+            {% if missing_skills %}
+                {% for skill in missing_skills %}
+                    <span class="badge missing">{{ skill }}</span>
+                {% endfor %}
+            {% else %}
+                <p>None 🎉</p>
+            {% endif %}
+        </div>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>
+
+
+
